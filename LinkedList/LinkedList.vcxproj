@@ -69,7 +69,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\Mason\Documents\Visual Studio 2017\Projects\LinkedList\packages\VisualLeakDetector.2.5.0.0\lib\native\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Mason\Documents\Visual Studio 2017\Projects\LinkedList\packages\VisualLeakDetector.2.5.0.0\lib\native\address-model-32\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -117,6 +120,9 @@
   <ItemGroup>
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Node.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LinkedListDemo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

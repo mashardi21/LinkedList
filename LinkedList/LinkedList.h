@@ -59,6 +59,11 @@ public:
 	}
 
 	void insertNode(T newData) {
+		if (newData == NULL) {
+			std::cout << "Cannot have data of NULL. No node was created..." << std::endl;
+			return;
+		}
+
 		Node<T>* newNode = new Node<T>(newData);
 
 		if (_headPtr == nullptr) {
@@ -76,11 +81,15 @@ public:
 	}
 
 	void deleteNode(Node<T>* delNode) {
-		if (_headPtr == nullptr || delNode->getPrevNode() == nullptr) {
+		if (_headPtr == nullptr) {
 			return;
 		}
 
-		if (delNode == _headPtr) {
+		if (_listSize == 1) {
+			_headPtr = nullptr;
+			_tailPtr = nullptr;
+		}
+		else if (delNode == _headPtr) {
 			_headPtr = delNode->getNextNode();
 			_headPtr->setPrevNode(nullptr);
 		}
@@ -97,9 +106,20 @@ public:
 		}
 
 		delete delNode;
+		_listSize--;
 	}
 
+	// Find the first node that contains the requested data and return a pointer to it
+	//
+	// ***IMPORTANT: IF THE LIST CONTAINS MULTIPLE NODES WITH THE SAME DATA, ONLY THE FIRST 
+	//    NODE WITH MATCHING DATA WILL BE RETURNED. I WAS UNABLE TO FIGURE OUT HOW TO FIND
+	//    DUPLICATES***
+	//
 	Node<T>* Find(T dataToFind) {
+		if (dataToFind == NULL) {
+			return nullptr;
+		}
+
 		Node<T>* currentNode = new Node<T>;
 		currentNode->setNextNode(_headPtr);
 
