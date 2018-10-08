@@ -1,36 +1,52 @@
-#ifndef NODE.H
-#define NODE.H
+#ifndef NODE_H
+#define NODE_H
 
-template <class T>
+template <typename T>
 class Node {
 public:
+	Node() {
+		_nextNode = nullptr;
+		_prevNode = nullptr;
+	}
+	
 	Node(T data) {
 		_data = data;
 		_nextNode = nullptr;
 		_prevNode = nullptr;
 	}
+
 	~Node() {
 
 	}
+
+	void setData(T newData) {
+		_data = newData;
+	}
+
 	T getData() {
 		return _data;
 	}
-	void setNextNode(T* nextNode) {
+
+	void setNextNode(Node<T>* nextNode) {
 		_nextNode = nextNode;
 	}
-	void setPrevNode(T* prevNode) {
+
+	void setPrevNode(Node<T>* prevNode) {
 		_prevNode = prevNode;
 	}
-	T* getNextNode() {
+
+	Node<T>* getNextNode() {
 		return _nextNode;
 	}
-	T* getPrevNode() {
+
+	Node<T>* getPrevNode() {
 		return _prevNode;
 	}
+
 private:
 	T _data;
-	T* _nextNode;
-	T* _prevNode;
+	Node<T>* _nextNode;
+	Node<T>* _prevNode;
 };
 
-#endif // !NODE.H
+#endif // !NODE_H

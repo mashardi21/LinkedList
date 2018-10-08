@@ -1,17 +1,11 @@
-#include "LinkedList.h"
-#include "Node.h"
+#define CATCH_CONFIG_RUNNER // This is needed to utilize the catch2 testing framework
+#include <catch.hpp>
 
-using namespace std;
+#include<iostream>
 
-int main() {
-	LinkedList<int> list = LinkedList<int>();
+int main(int argc, char * argv[]) {
+	int result = Catch::Session().run(argc, argv);
 
-	for (int i = 0; i < 10; i++) {
-		list.insertNode(i);
-	}
-
-	Node<int>* foundNode;
-	foundNode = list.Find(5);
-
-	return 0;
+	system("PAUSE");
+	return result;
 }

@@ -1,10 +1,9 @@
-#ifndef LINKEDLIST.H
-#define LINKEDLIST.H
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
 
 #include "Node.h"
-#include "Node.cpp"
 
-template <class T>
+template <typename T>
 class LinkedList {
 public:
 	LinkedList() {
@@ -12,14 +11,22 @@ public:
 		_tailPtr = nullptr;
 	}
 	~LinkedList() {
+		Node<T>* currentNode = _headPtr;
+
+		while (currentNode != nullptr) {
+			Node<T>* nextNode = currentNode->getNextNode();
+			delete currentNode;
+			currentNode = nextNode;
+		}
 
 	}
 	Node<T>* Find(T dataToFind) {
-		Node<T>* currentNode = *_headPtr;
+		Node<T>* currentNode = new Node<T>;
+		currentNode->setNextNode(_headPtr);
 
-		while (currentNode->getNextNode() != nullptr) {
+		while (currentNode != nullptr) {
 			if (currentNode->getData() == dataToFind) {
-				return &currentNode;
+				return currentNode;
 			}
 			else {
 				currentNode = currentNode->getNextNode();
@@ -29,32 +36,30 @@ public:
 		return nullptr;
 	}
 	void insertNode(T newData) {
-		Node<T> newNode = Node<T>(newData);
-		Node<T>* nodePtr = &newNode;
+		Node<T>* newNode = new Node<T>(newData);
 
 		if (_headPtr == nullptr) {
-			_headPtr = nodePtr;
-			_tailPtr = nodePtr;
+			_headPtr = newNode;
+			_tailPtr = newNode;
 		}
 		else if (_headPtr != nullptr) {
-			newNode.setPrevNode(_tailPtr);
-			newNode.setNextNode(nullptr);
-			_tailPtr->setNextNode(&newNode);
-			_tailPtr = &newNode;
+			newNode->setPrevNode(_tailPtr);
+			newNode->setNextNode(nullptr);
+			_tailPtr->setNextNode(newNode);
+			_tailPtr = newNode;
 		}
 
-		delete nodePtr;
 	}
-	void deleteNode(Node* delNode) {
+	void deleteNode(Node<T>* delNode) {
 		if (_headPtr == nullptr || delNode->getPrevNode() == nullptr) {
 			return;
 		}
 
-		if (&delnode == &_headPtr) {
+		if (delNode == _headPtr) {
 			_headPtr = delNode->getNextNode();
 			_headPtr->setPrevNode(nullptr);
 		}
-		else if (&delNode == &_tailPtr) {
+		else if (delNode == _tailPtr) {
 			_tailPtr = delNode->getPrevNode();
 			_tailPtr->setNextNode(nullptr);
 		}
@@ -70,9 +75,8 @@ public:
 	}
 
 private:
-	Node* _headPtr;
-	Node* _tailPtr;
-
+	Node<T>* _headPtr;
+	Node<T>* _tailPtr;
 };
 
-#endif // !LINKEDLIST.H
+#endif // !LINKEDLIST_H
