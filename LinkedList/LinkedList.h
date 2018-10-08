@@ -6,10 +6,36 @@
 template <typename T>
 class LinkedList {
 public:
+	// Default constructor
 	LinkedList() {
+		_listSize = 0;
 		_headPtr = nullptr;
 		_tailPtr = nullptr;
 	}
+
+	// Copy constructor
+	LinkedList(const LinkedList<T> &copiedList) {
+		_listSize = 0;
+		_headPtr = nullptr;
+		_tailPtr = nullptr;
+
+		Node<T> copyNode = Node<T>();
+		Node<T> tempNode = *(copiedList.getHeadPtr());
+
+		copyNode.setNextNode(copiedList.getHeadPtr());
+
+		do {
+			copyNode = *(copyNode.getNextNode());
+			insertNode(copyNode.getData());
+			copyNode.setNextNode(tempNode.getNextNode());
+			
+			if (tempNode.getNextNode() != nullptr) {
+				tempNode = *(tempNode.getNextNode());
+			}
+		} while (copyNode.getNextNode() != nullptr);
+	}
+
+	// Destructor
 	~LinkedList() {
 		Node<T>* currentNode = _headPtr;
 
@@ -18,23 +44,20 @@ public:
 			delete currentNode;
 			currentNode = nextNode;
 		}
-
 	}
-	Node<T>* Find(T dataToFind) {
-		Node<T>* currentNode = new Node<T>;
-		currentNode->setNextNode(_headPtr);
 
-		while (currentNode != nullptr) {
-			if (currentNode->getData() == dataToFind) {
-				return currentNode;
-			}
-			else {
-				currentNode = currentNode->getNextNode();
-			}
-		}
-
-		return nullptr;
+	Node<T>* getHeadPtr() {
+		return _headPtr;
 	}
+
+	Node<T>* getTailPtr() {
+		return _tailPtr;
+	}
+
+	int getListSize() {
+		return _listSize;
+	}
+
 	void insertNode(T newData) {
 		Node<T>* newNode = new Node<T>(newData);
 
@@ -49,7 +72,9 @@ public:
 			_tailPtr = newNode;
 		}
 
+		_listSize++;
 	}
+
 	void deleteNode(Node<T>* delNode) {
 		if (_headPtr == nullptr || delNode->getPrevNode() == nullptr) {
 			return;
@@ -74,9 +99,26 @@ public:
 		delete delNode;
 	}
 
+	Node<T>* Find(T dataToFind) {
+		Node<T>* currentNode = new Node<T>;
+		currentNode->setNextNode(_headPtr);
+
+		while (currentNode != nullptr) {
+			if (currentNode->getData() == dataToFind) {
+				return currentNode;
+			}
+			else {
+				currentNode = currentNode->getNextNode();
+			}
+		}
+
+		return nullptr;
+	}
+
 private:
 	Node<T>* _headPtr;
 	Node<T>* _tailPtr;
+	int _listSize;
 };
 
 #endif // !LINKEDLIST_H
