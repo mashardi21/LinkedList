@@ -1,6 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <string>
+
 template <typename T>
 class Node {
 public:
@@ -13,10 +15,6 @@ public:
 		_data = data;
 		_nextNode = nullptr;
 		_prevNode = nullptr;
-	}
-
-	~Node() {
-
 	}
 
 	void setData(T newData) {

@@ -133,7 +133,7 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 		REQUIRE(middleNode->getNextNode() == testList.getTailPtr());
 	}
 
-	SECTION("deleteNode/attampt to delete the head and tail nodes from a list/size decrements by 2, headPtr/tailPtr update to the nodes that were adjacent to the head/tail, respectively, new head/tail update their prevNode/nextNode to nullptr") {
+	SECTION("deleteNode/attempt to delete the head and tail nodes from a list/size decrements by 2, headPtr/tailPtr update to the nodes that were adjacent to the head/tail, respectively, new head/tail update their prevNode/nextNode to nullptr") {
 		for (int i = 0; i < 5; i++) {
 			testList.insertNode(i + 1);
 		}
@@ -154,6 +154,31 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 		REQUIRE(testList.getTailPtr() == adjacentToTail);
 		REQUIRE(testList.getHeadPtr()->getPrevNode() == nullptr);
 		REQUIRE(testList.getTailPtr()->getNextNode() == nullptr);
+	}
+
+	SECTION("clearList/attempt to delete all nodes from a list without deleteing the list itself/list should start out populated, and end with no nodes, a size of 0, and a _headPtr/_tailPtr == nullptr") {
+		for (int i = 0; i < 5; i++) {
+			testList.insertNode(i);
+		}
+
+		// Get size, _headPtr, and _tailPtr values prior to deletion for comparison
+		int initialSize = testList.getListSize();
+		Node<int>* intitialHead = testList.getHeadPtr();
+		Node<int>* initialTail = testList.getTailPtr();
+
+		testList.clearList();
+
+		// Test the size of the deleted list
+		REQUIRE(testList.getListSize() != initialSize);
+		REQUIRE(testList.getListSize() == 0);
+
+		// Test the _headPtr of the deleted list
+		REQUIRE(testList.getHeadPtr() != intitialHead);
+		REQUIRE(testList.getHeadPtr() == nullptr);
+
+		//Test the _tailPtr of the deleted list
+		REQUIRE(testList.getTailPtr() != initialTail);
+		REQUIRE(testList.getTailPtr() == nullptr);
 	}
 }
 
@@ -206,17 +231,46 @@ TEST_CASE("Find/locate a node containing the requested data/return a pointer to 
 }
 // This function exists only to prove that the list was copied correctly
 bool compareLists(LinkedList<int> &list1, LinkedList<int> &list2) {
-	
+	if (&list1 != &list2) {
+		Node<int>* list1Current = list1.getHeadPtr();
+		Node<int>* list2Current = list2.getHeadPtr();
+		int numSameNodes = 0;
 
-	return false;
+		for (int i = 0; i < list1.getListSize(); i++) {
+			if (list1Current->getData() == list2Current->getData()) {
+				numSameNodes++;
+			}
+
+			list1Current = list1Current->getNextNode();
+			list2Current = list2Current->getNextNode();
+		}
+
+		if (numSameNodes == list1.getListSize() && numSameNodes == list2.getListSize()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
 
-TEST_CASE("CopyConstructor/create a deep copy of a linked list/copy each node of the list to a node belonging to a new list, creating 2 identical lists", "[Copying]") {
+TEST_CASE("CopyConstructor and overloaded operator=/create a deep copy of a linked list/copy each node of the list to a node belonging to a new list, creating 2 identical lists", "[Copying]") {
 	LinkedList<int> testList;
 
-	
+	for (int i = 0; i < 5; i++) {
+		testList.insertNode(i + 1);
+	}
 
-	SECTION("CopyConstructor/") {
+	SECTION("CopyConstructor/create a deep copy of a list using the copy constructor and compare the two lists/the lists should be identical (compareLists should return true), but not the same object") {
+		LinkedList<int> copiedList = testList;
+		
+		REQUIRE(compareLists(testList, copiedList));
+	}
 
+	SECTION("overloaded operator=/create a deep copy of a list using the overloaded operator= and compare the two lists/the lists should be identical (compareLists should return true), but not the same object") {
+		LinkedList<int> copiedList;
+		copiedList = testList;
+
+		REQUIRE(compareLists(testList, copiedList));
 	}
 }

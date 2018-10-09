@@ -1,6 +1,8 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <string>
+
 #include "Node.h"
 
 template <typename T>
@@ -13,26 +15,44 @@ public:
 		_tailPtr = nullptr;
 	}
 
-	// Copy constructor
-	LinkedList(const LinkedList<T> &copiedList) {
+	// OverLoaded copy constructor to allow for a deep copy
+	LinkedList(const LinkedList<T>& copiedList) {
 		_listSize = 0;
 		_headPtr = nullptr;
 		_tailPtr = nullptr;
+		*this = copiedList;
+	}
 
-		Node<T> copyNode = Node<T>();
-		Node<T> tempNode = *(copiedList.getHeadPtr());
-
-		copyNode.setNextNode(copiedList.getHeadPtr());
-
-		do {
-			copyNode = *(copyNode.getNextNode());
-			insertNode(copyNode.getData());
-			copyNode.setNextNode(tempNode.getNextNode());
-			
-			if (tempNode.getNextNode() != nullptr) {
-				tempNode = *(tempNode.getNextNode());
+	// Overloaded operator= for creating deep copies
+	const LinkedList<T>& operator=(const LinkedList<T>& otherList) {
+		if (this != &otherList) {
+			if (_headPtr != nullptr) {
+				clearList();
 			}
-		} while (copyNode.getNextNode() != nullptr);
+
+			Node<T>* copyNode = nullptr;
+			Node<T>* otherNode = otherList._headPtr;
+
+			while (otherNode != nullptr) {
+				if (_headPtr == nullptr) {
+					copyNode = new Node<T>(otherNode->getData());
+					_headPtr = copyNode;
+					_tailPtr = copyNode;
+					otherNode = otherNode->getNextNode();
+					_listSize++;
+				}
+				else {
+					copyNode->setNextNode(new Node<T>(otherNode->getData()));
+					copyNode = copyNode->getNextNode();
+					copyNode->setPrevNode(_tailPtr);
+					_tailPtr = copyNode;
+					otherNode = otherNode->getNextNode();
+					_listSize++;
+				}
+			}
+		}
+
+		return *this;
 	}
 
 	// Destructor
@@ -59,7 +79,7 @@ public:
 	}
 
 	void insertNode(T newData) {
-		if (newData == NULL) {
+		if (newData == nullptr) {
 			std::cout << "Cannot have data of NULL. No node was created..." << std::endl;
 			return;
 		}
@@ -109,6 +129,22 @@ public:
 		_listSize--;
 	}
 
+	// This function deletes every node in the list without deleteing the list object itself
+	void clearList() {
+		Node<T>* currentNode = _headPtr;
+
+		Node<T>* nextNode = currentNode->getNextNode();
+
+		while (currentNode != nullptr) {
+			deleteNode(currentNode);
+			currentNode = nextNode;
+			
+			if (nextNode != nullptr) {
+				nextNode = nextNode->getNextNode();
+			}
+		}
+	}
+
 	// Find the first node that contains the requested data and return a pointer to it
 	//
 	// ***IMPORTANT: IF THE LIST CONTAINS MULTIPLE NODES WITH THE SAME DATA, ONLY THE FIRST 
@@ -120,7 +156,7 @@ public:
 			return nullptr;
 		}
 
-		Node<T>* currentNode = new Node<T>;
+		Node<T>* currentNode = new Node<T>();
 		currentNode->setNextNode(_headPtr);
 
 		while (currentNode != nullptr) {
