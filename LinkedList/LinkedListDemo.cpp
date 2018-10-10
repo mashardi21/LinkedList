@@ -1,40 +1,45 @@
 #include <iostream>
-#include <string>
 
 #include "LinkedList.h"
 
 using namespace std;
 
-template<typename T>
-void printList(LinkedList<T>& list1) {
-	Node<T>* currentNode = list1.getHeadPtr();
-
-	while (currentNode != nullptr) {
-		cout << currentNode->getData() << ", ";
-		currentNode = currentNode->getNextNode();
-	}
-	cout << endl << endl;
-}
-
 int main() {
-	// Create three linked lists that store different types
 	LinkedList<int> intList;
-	LinkedList<string> stringList;
+	int userValue;
 
 	cout << "Welcome to my Linked List Demo" << endl;
 
-	stringList.insertNode("one");
-	stringList.insertNode("two");
-	stringList.insertNode("tree");
-	stringList.insertNode("four");
-	stringList.insertNode("five");
-
+	cout << "Initializing and populating the list..." << endl;
 	for (int i = 0; i < 5; i++) {
 		intList.insertNode(i + 1);
 	}
 
-	printList(intList);
-	printList(stringList);
+	cout << "The list has been populated:" << endl;
+	cout << "\t" << intList << endl;
+	cout << endl;
+
+	system("PAUSE");
+	system("CLS");
+
+	cout << "New nodes can be added to the list." << endl;
+	cout << "Please enter a number to store in the list: ";
+	cin >> userValue;
+	cin.ignore();
+
+	system("CLS");
+
+	cout << "Adding node to list..." << endl;
+
+	intList.insertNode(userValue);
+
+	cout << "Node added:" << endl;
+	cout << "\t" << intList << endl;
+
+	system("PAUSE");
+	system("CLS");
+
+	cout << "Nodes can also be searched for" << endl;
 
 	system("PAUSE");
 	return 0;

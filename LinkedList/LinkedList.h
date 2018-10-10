@@ -1,8 +1,6 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-#include <string>
-
 #include "Node.h"
 
 template <typename T>
@@ -79,8 +77,7 @@ public:
 	}
 
 	void insertNode(T newData) {
-		if (newData == nullptr) {
-			std::cout << "Cannot have data of NULL. No node was created..." << std::endl;
+		if (newData == NULL) {
 			return;
 		}
 
@@ -171,10 +168,32 @@ public:
 		return nullptr;
 	}
 
+	
+
 private:
 	Node<T>* _headPtr;
 	Node<T>* _tailPtr;
 	int _listSize;
+
+	template<typename T, typename charT, typename traits>
+	friend std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream, const LinkedList<T>& list);
 };
+
+// Overload the operator<< to allow a lists nodes to be printed with an ostrem, eg. cout << list << endl;
+template<typename T, typename charT, typename traits>
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& Stream, const LinkedList<T>& list) {
+	Node<T>* currentNode;
+
+	for (currentNode = list._headPtr; currentNode != nullptr; currentNode = currentNode->getNextNode()) {
+		if (currentNode->getNextNode() == nullptr) {
+			Stream << currentNode->getData();
+		}
+		else {
+			Stream << currentNode->getData() << ", ";
+		}
+	}
+
+	return Stream;
+}
 
 #endif // !LINKEDLIST_H
