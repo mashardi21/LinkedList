@@ -64,6 +64,7 @@ public:
 		}
 	}
 
+	// Getters for headPtr, tailPtr, and listsize
 	Node<T>* getHeadPtr() {
 		return _headPtr;
 	}
@@ -76,6 +77,7 @@ public:
 		return _listSize;
 	}
 
+	// this function inserts a new node at the tail of the list that contains the user-provided value
 	void insertNode(T newData) {
 		if (newData == NULL) {
 			return;
@@ -97,6 +99,7 @@ public:
 		_listSize++;
 	}
 
+	// This function deletes a node found at the provided memory address
 	void deleteNode(Node<T>* delNode) {
 		if (_headPtr == nullptr) {
 			return;
@@ -148,7 +151,7 @@ public:
 	//    NODE WITH MATCHING DATA WILL BE RETURNED. I WAS UNABLE TO FIGURE OUT HOW TO FIND
 	//    DUPLICATES***
 	//
-	Node<T>* Find(T dataToFind) {
+	Node<T>* find(T dataToFind) {
 		if (dataToFind == NULL) {
 			return nullptr;
 		}
@@ -171,6 +174,7 @@ public:
 	
 
 private:
+	// private vairables for storing the head, tail, and size of the list
 	Node<T>* _headPtr;
 	Node<T>* _tailPtr;
 	int _listSize;
@@ -179,17 +183,24 @@ private:
 	friend std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream, const LinkedList<T>& list);
 };
 
-// Overload the operator<< to allow a lists nodes to be printed with an ostrem, eg. cout << list << endl;
+// Overload the operator<< to allow a lists nodes to be printed with an ostrem, eg. cout << listName << endl;
+//
+// ***IMPORTANT: IF THE LIST IS STORING A USER-CREATED TYPE, THAT TYPE MUST HAVE AN OVERLOADED operator<< ***
 template<typename T, typename charT, typename traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& Stream, const LinkedList<T>& list) {
-	Node<T>* currentNode;
+	Node<T>* currentNode = list._headPtr;
 
-	for (currentNode = list._headPtr; currentNode != nullptr; currentNode = currentNode->getNextNode()) {
-		if (currentNode->getNextNode() == nullptr) {
-			Stream << currentNode->getData();
-		}
-		else {
-			Stream << currentNode->getData() << ", ";
+	if (currentNode == nullptr) {
+		Stream << "";
+	}
+	else {
+		for (currentNode; currentNode != nullptr; currentNode = currentNode->getNextNode()) {
+			if (currentNode->getNextNode() == nullptr) {
+				Stream << currentNode->getData();
+			}
+			else {
+				Stream << currentNode->getData() << ", ";
+			}
 		}
 	}
 

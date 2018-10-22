@@ -70,7 +70,7 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 		Node<int>* initialHead = testList.getHeadPtr(); // == nullptr
 		Node<int>* initialTail = testList.getTailPtr(); // == nullptr
 
-		Node<int>* foundAddr = testList.Find(1); // == nullptr
+		Node<int>* foundAddr = testList.find(1); // == nullptr
 		testList.deleteNode(foundAddr);
 
 		REQUIRE(testList.getListSize() == initialSize);
@@ -82,7 +82,7 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 	SECTION("deleteNode/attempt to delete node from a single-node list/size = 0, headPtr and tailPtr = nullptr") {
 		testList.insertNode(1);
 
-		Node<int>* foundAddr = testList.Find(1);
+		Node<int>* foundAddr = testList.find(1);
 		testList.deleteNode(foundAddr);
 
 		// Test that the size, headPtr, and tailPtr are set to the correct values
@@ -99,10 +99,10 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 		int initialSize = testList.getListSize(); // == 5
 
 		// Create pointers to the previous and next nodes for test code simplification
-		Node<int>* prevNode = testList.Find(2); 
-		Node<int>* nextNode = testList.Find(4);
+		Node<int>* prevNode = testList.find(2); 
+		Node<int>* nextNode = testList.find(4);
 
-		Node<int>* foundAddr = testList.Find(3);
+		Node<int>* foundAddr = testList.find(3);
 		testList.deleteNode(foundAddr);
 
 		// Test that the size decrements by 1, and the previous and next nodes update their nextNode and prevNode pointers, respectively
@@ -117,10 +117,10 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 		}
 
 		int initialSize = testList.getListSize(); // == 5
-		Node<int>* middleNode = testList.Find(3); // Create pointer to middle node for test code simplification
+		Node<int>* middleNode = testList.find(3); // Create pointer to middle node for test code simplification
 
-		Node<int>* foundAddr1 = testList.Find(2);
-		Node<int>* foundAddr2 = testList.Find(4);
+		Node<int>* foundAddr1 = testList.find(2);
+		Node<int>* foundAddr2 = testList.find(4);
 
 		testList.deleteNode(foundAddr1);
 		testList.deleteNode(foundAddr2);
@@ -139,11 +139,11 @@ TEST_CASE("deleteNode/delete node found at given memory address/size updates, he
 		}
 
 		int initialSize = testList.getListSize(); // == 5;
-		Node<int>* adjacentToHead = testList.Find(2);
-		Node<int>* adjacentToTail = testList.Find(4);
+		Node<int>* adjacentToHead = testList.find(2);
+		Node<int>* adjacentToTail = testList.find(4);
 
-		Node<int>* foundAddr1 = testList.Find(1);
-		Node<int>* foundAddr2 = testList.Find(5);
+		Node<int>* foundAddr1 = testList.find(1);
+		Node<int>* foundAddr2 = testList.find(5);
 		
 		testList.deleteNode(foundAddr1);
 		testList.deleteNode(foundAddr2);
@@ -186,7 +186,7 @@ TEST_CASE("Find/locate a node containing the requested data/return a pointer to 
 	LinkedList<int> testList;
 
 	SECTION("Find/attempt to locate node in empty list/return nullptr") {
-		REQUIRE(testList.Find(1) == nullptr);
+		REQUIRE(testList.find(1) == nullptr);
 	}
 
 	SECTION("Find/attempt to locate node that isn't present in list/return nullptr") {
@@ -194,7 +194,7 @@ TEST_CASE("Find/locate a node containing the requested data/return a pointer to 
 			testList.insertNode(i + 1);
 		}
 
-		REQUIRE(testList.Find(6) == nullptr);
+		REQUIRE(testList.find(6) == nullptr);
 	}
 
 	SECTION("Find/attempt to locate node with data of NULL/return nullptr") {
@@ -202,7 +202,7 @@ TEST_CASE("Find/locate a node containing the requested data/return a pointer to 
 			testList.insertNode(i + 1);
 		}
 
-		REQUIRE(testList.Find(NULL) == nullptr);
+		REQUIRE(testList.find(NULL) == nullptr);
 	}
 
 	SECTION("Find/attempt to locate node that is present in list/return address to correct node") {
@@ -211,10 +211,10 @@ TEST_CASE("Find/locate a node containing the requested data/return a pointer to 
 		}
 
 		// Test that a pointer was returned
-		REQUIRE(testList.Find(4) != nullptr);
+		REQUIRE(testList.find(4) != nullptr);
 
 		// Test that the returned pointer contains the correct data
-		REQUIRE(testList.Find(4)->getData() == 4);
+		REQUIRE(testList.find(4)->getData() == 4);
 	}
 
 	SECTION("Find/attempt to locate data that is duplicated within the list/only return 1 address the correct node(the first one found)") {
@@ -223,10 +223,10 @@ TEST_CASE("Find/locate a node containing the requested data/return a pointer to 
 		}
 
 		// Test that a pointer was returned
-		REQUIRE(testList.Find(1) != nullptr);
+		REQUIRE(testList.find(1) != nullptr);
 
 		// Test that the returned pointer contains the correct data
-		REQUIRE(testList.Find(1)->getData() == 1);
+		REQUIRE(testList.find(1)->getData() == 1);
 	}
 }
 // This function exists only to prove that the list was copied correctly
